@@ -80,9 +80,8 @@ st.markdown("""
 def load_model():
     model_path = hf_hub_download(
         repo_id="Przemsonn/Recommendation_System",
-        filename="recommendation_model.joblib"
+        filename="recommendation_intelligent_model.joblib"
     )
-
     with open(model_path, 'rb') as file:
         model = joblib.load(file)
     return model
