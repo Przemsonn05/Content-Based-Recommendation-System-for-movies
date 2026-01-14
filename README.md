@@ -366,22 +366,18 @@ The project is deployed as an interactive **Streamlit** web application, providi
 1. **GenAI Integration**
    - Upgrade NLP layer using **BERT** or **Sentence Transformers** for deeper semantic understanding
    - Expected improvement: Better handling of synonyms and abstract themes
-   - Challenge: Computational cost and model size
 
 2. **Conversational Interface**
    - Add chatbot for natural language queries: *"I want a sad movie about robots with a hopeful ending"*
    - Powered by LLMs (GPT-4 or Llama 3) for query parsing
-   - Challenge: Handling ambiguous requests and maintaining context
 
 3. **Collaborative Filtering Hybrid**
    - Combine content-based with user behavior signals
    - Requires user accounts and watch history tracking
-   - Privacy considerations: GDPR compliance, anonymization
 
 4. **Production Deployment**
    - **Dockerization** for containerized deployment
    - Migration from Streamlit Cloud to AWS ECS / Google Cloud Run
-   - Target: <500ms latency, 100+ concurrent users, 99.9% uptime
 
 ---
 
@@ -439,6 +435,6 @@ movie-recommender/
 
 **⭐ If you found this project helpful, please star the repository!**
 
-[![GitHub stars](https://img.shields.io/github/stars/Przemsonn/movie-recommender?style=social)](https://github.com/Przemsonn05/Content-Based-Recommendation-System-for-movies?tab=readme-ov-file)
+[![GitHub stars](https://img.shields.io/github/stars/Przemsonn/movie-recommender?style=social)](https://github.com/Przemsonn05/Content-Based-Recommendation-System-for-movies)
 
 </div>
