@@ -1,246 +1,155 @@
-# 🎬 Hybrid Movie Recommendation Engine
-### *A Content-Based System Balancing Quality, Diversity, and Semantic Relevance*
+# 🎬 Content-Based Movie Recommendation System
 
 <div align="center">
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge&logo=python)
 ![Streamlit](https://img.shields.io/badge/Streamlit-App-FF4B4B?style=for-the-badge&logo=streamlit)
-![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)
-![NLP](https://img.shields.io/badge/NLP-TF--IDF-green?style=for-the-badge)
-![Status](https://img.shields.io/badge/Status-Production-success?style=for-the-badge)
+![Scikit-Learn](https://img.shields.io/badge/Library-Scikit--Learn-orange?style=for-the-badge&logo=scikit-learn)
+![Status](https://img.shields.io/badge/Status-Completed-success?style=for-the-badge)
 
-[🚀 Live Demo](https://content-based-recommendation-system-for-movies-mr9raxrqxyopdb9.streamlit.app) • [📦 Models on Hugging Face](https://huggingface.co/Przemsonn/Recommendation_System) • [📊 Performance Metrics](#-performance--evaluation)
+**[🚀 Live Demo](https://content-based-recommendation-system-for-movies-mr9raxrqxyopdb9.streamlit.app) • [📦 Models on Hugging Face](https://huggingface.co/Przemsonn/Recommendation_System)**
 
 </div>
 
 ---
 
-## 🎯 Executive Summary
+## 📌 Project Overview
 
-In the streaming era, users face **choice overload** with thousands of titles available at their fingertips. This project addresses the "analysis paralysis" problem by building an intelligent recommendation engine that goes beyond simple genre matching.
+In the era of streaming wars, users often face **"analysis paralysis"** due to content overload. This project implements a robust movie recommendation engine designed to surface relevant content by analyzing metadata semantic similarities.
 
-**What makes this different:**
-- 🧠 **Hybrid Intelligence**: Combines semantic similarity (NLP), quality filtering, popularity signals, and recency weighting
-- 🎲 **Cold Start Solution**: Provides statistically significant recommendations even for new users with no history
+Unlike simple tag-matching systems, this engine employs a **Hybrid Logic** that balances semantic relevance, movie quality, popularity trends, and release recency. The result is a personalized discovery experience that mitigates common pitfalls of standard recommendation algorithms.
+
+### 🎯 Key Features
+
+- 🧠 **Hybrid Intelligence**: Combines NLP-based semantic similarity with quality, popularity, and recency signals
+- 🎲 **Cold Start Solution**: Curated baseline model for new users with no viewing history
 - ⚖️ **Balanced Discovery**: Surfaces both mainstream hits and hidden gems while maintaining quality standards
-- 📊 **Data-Driven Design**: Every decision backed by Monte Carlo simulations and performance metrics
-
-**Technical Highlights:**
-- TF-IDF vectorization on enriched metadata "soup" (cast, crew, keywords, genres)
-- Custom Bayesian weighted rating system to balance popularity and quality
-- Multi-objective optimization balancing 4 competing factors with tuned weights
-- Achieved 6.60/10 avg quality score while maintaining 0.72 diversity index
-
----
-
-## 📋 Table of Contents
-
-- [Live Demo & Resources](#-live-demo--resources)
-- [The Problem Space](#-the-problem-space)
-- [Solution Architecture](#-solution-architecture)
-- [Data Pipeline](#-data-pipeline)
-- [Model Design](#-model-design)
-  - [Baseline Model: Cold Start Solution](#️-baseline-model-cold-start-solution)
-  - [Main Model: Hybrid Engine](#-main-model-hybrid-recommendation-engine)
-- [Performance & Evaluation](#-performance--evaluation)
-- [Application Interface](#-application-interface)
-- [Installation & Usage](#️-installation--usage)
-- [Key Learnings](#-key-learnings--insights)
-- [Future Roadmap](#-future-roadmap)
-- [Contributing](#-contributing)
+- 📊 **Data-Driven Design**: Validated through Monte Carlo simulations with measurable performance metrics
 
 ---
 
 ## 🚀 Live Demo & Resources
 
-| Resource | Link | Description |
-|----------|------|-------------|
-| **🌐 Streamlit App** | [![Launch](https://img.shields.io/badge/Launch-App-FF4B4B)](https://content-based-recommendation-system-for-movies-mr9raxrqxyopdb9.streamlit.app) | Interactive web interface with 4,800+ movies |
-| **🤗 Model Registry** | [![HuggingFace](https://img.shields.io/badge/Models-HuggingFace-yellow)](https://huggingface.co/Przemsonn/Recommendation_System) | Pre-trained models and vectorizers |
-| **📓 Analysis Notebook** | `Recommendation_System.ipynb` | Full EDA, model training, and evaluation |
-| **📊 Performance Dashboard** | See [Performance Section](#-performance--evaluation) | Monte Carlo validation results |
+| Platform | Link | Description |
+| :--- | :--- | :--- |
+| **Streamlit App** | [![Streamlit](https://img.shields.io/badge/Launch-App-FF4B4B)](https://content-based-recommendation-system-for-movies-mr9raxrqxyopdb9.streamlit.app) | Interactive dashboard with 4,800+ movies |
+| **Hugging Face** | [![Hugging Face](https://img.shields.io/badge/Models-Registry-yellow)](https://huggingface.co/Przemsonn/Recommendation_System) | Pre-trained models and vectorizers |
 
 ---
 
-## 🔍 The Problem Space
+## ⚙️ Methodology & Data Pipeline
 
-### The Challenge
-Modern streaming platforms offer 10,000+ titles, leading to:
-- **Decision Fatigue**: Users spend more time browsing than watching
-- **Filter Bubbles**: Simple algorithms create echo chambers of similar content
-- **Quality Variance**: Popular ≠ Good (blockbusters vs. critically acclaimed films)
-- **Cold Start Problem**: How to recommend when user history is unavailable?
+### 1. Data Cleaning & Parsing
 
-### Our Approach
-Instead of building yet another collaborative filter or simple tag matcher, we developed a **content-based hybrid system** that:
-1. ✅ Works immediately (no user history required)
-2. ✅ Balances multiple objectives (quality, diversity, popularity, recency)
-3. ✅ Understands semantic meaning through NLP
-4. ✅ Transparently shows why movies are recommended
+Data precision was paramount. We performed rigorous cleaning, including parsing complex stringified lists (e.g., converting `['Science', 'Fiction']` to `sciencefiction`). This "sanitization" step was crucial for the NLP model to treat multi-word genres and names as unique tokens, preventing semantic drift.
 
----
+**Key operations included:**
+- **Imputation**: Missing values were filled using statistical reasoning (e.g., medians for numerical gaps)
+- **Pruning**: Irrelevant features that added noise were removed
+- **Extraction Logic**: Custom functions were built:
+  - `get_boss()` - Extracts the director from crew data
+  - `get_5_cat()` - Retrieves top 5 billed actors
+  - Genre concatenation to create single tokens
 
-## 🏗️ Solution Architecture
+### 2. Exploratory Data Analysis (EDA)
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     INPUT: User Selects Movie               │
-└─────────────────────┬───────────────────────────────────────┘
-                      │
-                      ▼
-┌─────────────────────────────────────────────────────────────┐
-│              METADATA ENRICHMENT LAYER                      │
-│  • Cast & Crew Parsing                                      │
-│  • Genre Tokenization (sciencefiction → single token)       │
-│  • Tagline Integration for short overviews                  │
-│  • Keyword Extraction                                       │
-└─────────────────────┬───────────────────────────────────────┘
-                      │
-                      ▼
-┌─────────────────────────────────────────────────────────────┐
-│              TF-IDF VECTORIZATION ENGINE                    │
-│  Converts "Metadata Soup" → 10,000+ dimensional vectors     │
-│  Downweights common terms, highlights unique descriptors    │
-└─────────────────────┬───────────────────────────────────────┘
-                      │
-                      ▼
-┌─────────────────────────────────────────────────────────────┐
-│              SIMILARITY COMPUTATION                         │
-│  Cosine Similarity on TF-IDF vectors                        │
-│  Retrieves Top 100 candidates                               │
-└─────────────────────┬───────────────────────────────────────┘
-                      │
-                      ▼
-┌─────────────────────────────────────────────────────────────┐
-│              HYBRID RE-RANKING FORMULA                      │
-│                                                             │
-│  Score = 0.5×Similarity + 0.3×Quality                       │
-│          + 0.1×Popularity - 0.1×Age                         │
-│                                                             │
-│  • Similarity: Semantic match to input                      │
-│  • Quality: Bayesian weighted rating                        │
-│  • Popularity: Log-transformed vote count                   │
-│  • Age: Penalty for older films (preserves classics)        │
-└─────────────────────┬───────────────────────────────────────┘
-                      │
-                      ▼
-┌─────────────────────────────────────────────────────────────┐
-│              OUTPUT: Top 10 Recommendations                 │
-│  With Match %, Rating, Genres, Posters (TMDB API)           |
-└─────────────────────────────────────────────────────────────┘
-```
+EDA served as a decision-making tool rather than just visualization. It guided our feature selection and transformation strategies.
 
----
+![Distribution of Features](images/Distribution_of_Movie_Features.png)
 
-## 🔧 Data Pipeline
+**Key Insights from the Distribution Charts:**
 
-### Phase 1: Data Cleaning & Sanitization
+- **Vote Average (Upper Left)**: Most movies cluster between 5.5 and 7.5, forming a normal distribution. Extreme values (0 or 10) often indicated data scarcity rather than true quality, informing our Bayesian weighting strategy.
 
-**Challenge**: Raw TMDB data contains stringified lists, nested JSON, and inconsistencies.
+- **Popularity (Upper Right)**: Classic "Long Tail" distribution with most scores between 0–40. This heavy right skew necessitated logarithmic scaling to prevent blockbusters from completely dominating recommendations while still giving hidden gems a fair chance.
 
-**Solutions Implemented:**
-```python
-# Example: Genre parsing
-# Before: "['Science Fiction', 'Thriller']"
-# After: "sciencefiction thriller" (single tokens prevent semantic drift)
-```
+- **Runtime (Bottom Left)**: The median runtime is 90–120 minutes, following expected patterns for feature films. Outliers (<15 mins or >200 mins) were flagged and filtered out to preserve model integrity and avoid recommending shorts or experimental films unless specifically requested.
 
-**Key Cleaning Steps:**
-1. **Parsed Complex Structures**: Converted stringified lists to clean, space-separated tokens
-2. **Outlier Detection**: Removed/imputed movies with runtime <15 mins or >300 mins
-3. **Missing Data Strategy**:
-   - Overview missing → Use tagline if available
-   - Cast/Crew missing → Flag as "unknown" rather than delete (preserves data)
-4. **Deduplication**: Removed exact title duplicates, kept highest vote_count version
+- **Vote Count (Bottom Right)**: Highly skewed metric showing most films have fewer than 1,000 votes. High vote counts correlate with blockbuster status, requiring normalization through our weighted rating formula to balance confidence with actual quality scores.
 
-### Phase 2: Exploratory Data Analysis (EDA)
+### 3. Feature Engineering
 
-EDA wasn't just visualization—it drove **feature engineering decisions**:
+We engineered several custom features to enhance the recommendation logic:
 
-| Finding | Impact on Model |
-|---------|----------------|
-| **Long-tail popularity distribution** | Implemented log-transformation for popularity weight |
-| **Temporal bias** (70% post-1990) | Added age penalty to prevent favoring modern films |
-| **Rating variance** (low vote_count unreliable) | Created Bayesian weighted rating system |
-| **Genre imbalance** (Drama/Comedy dominate) | TF-IDF naturally downweights overrepresented genres |
-
-### Phase 3: Feature Engineering
-
-**Custom Features Created:**
+**Core Engineered Features:**
 
 1. **`weighted_rating`** (Bayesian Average)
-   ```
-   WR = (v/(v+m)) × R + (m/(v+m)) × C
-   
-   Where:
-   - v = vote_count for this movie
-   - m = minimum votes threshold (90th percentile)
-   - R = average rating for this movie
-   - C = mean rating across all movies
-   ```
-   **Impact**: Prevents niche films with 1 vote at 10/10 from outranking universally acclaimed movies.
+   - Balances high ratings with vote counts
+   - Prevents niche films with single 10/10 ratings from dominating
+   - Formula accounts for statistical significance of vote counts
 
-2. **`movie_age`** (Years since release)
-   ```python
-   movie_age = 2025 - release_year
-   ```
-   **Impact**: Slight penalty for older films, but quality score preserves classics.
+2. **`movie_age`** (Years Since Release)
+   - Calculated to slightly penalize outdated content
+   - Balances nostalgia with relevance
+   - Keeps classics alive while favoring recent releases
 
-3. **`metadata_soup`** (Composite Feature)
-   ```python
-   metadata_soup = keywords + cast + crew + genres + overview
-   ```
-   **Impact**: Rich semantic signal for TF-IDF—movies about "space exploration" differ from "space horror."
+3. **`tagline_integration`** (Text Enrichment)
+   - Appends taglines to short overviews
+   - Increases semantic signal for NLP processing
+   - Improves recommendations for movies with sparse descriptions
 
-4. **`log_popularity`** (Normalized Vote Count)
-   ```python
-   log_popularity = log(1 + vote_count)
-   ```
-   **Impact**: Surfaces hidden gems (1,000 votes) without drowning them under blockbusters (100,000 votes).
+**The Quality Score:**
+To quantify "good" content, we defined a composite weighted score:
+
+$$\text{Quality Score} = 0.6 \times \text{Weighted Rating} + 0.4 \times \text{Log Popularity}$$
+
+This formula ensures that both critical acclaim and audience recognition contribute to the final quality assessment, preventing the system from recommending either obscure high-rated films or popular low-quality content.
 
 ---
 
-## 🧠 Model Design
+## 🧠 Model Architecture
 
-### 🛡️ Baseline Model: Cold Start Solution
+### 🛡️ Baseline Model: The "Cold Start" Solution
 
-**Problem**: New users have no watch history. How do we recommend without personalization data?
+Every recommendation system faces the **Cold Start problem**: *How to serve recommendations to users with no viewing history?*
 
-**Solution**: A curated "Top 50" based on **statistically significant quality**.
+**Solution Strategy:**
+To address this, we built a curatorial Baseline Model that provides statistically significant recommendations without personalization. Rather than using simple averages (which can be misleading), we applied a **Weighted Quality Score** that penalizes low-confidence ratings.
 
-**Methodology:**
-1. Filter movies with vote_count > 90th percentile (high confidence ratings)
-2. Rank by weighted_rating (Bayesian average)
-3. Apply temporal filter: Prioritize post-1990 films (aligns with dataset distribution)
-4. Genre diversification: Ensure mix of Action, Drama, Sci-Fi, Thriller
+**Implementation:**
+- Filter movies with vote counts above the 90th percentile (high confidence)
+- Rank by Bayesian weighted rating
+- Apply temporal preference: prioritize post-1990 films (aligning with dataset distribution)
+- Ensure genre diversity: mix of Action, Drama, Sci-Fi, and Thriller
 
-**Validation:**
-![Popularity vs Quality Baseline](images/Popularity_vs_Quality_Top10_Baseline_Recommendations.png)
+**Performance Validation:**
 
-**Result**: Red dots cluster in the upper-right quadrant → **High Popularity + High Quality**. These are "safe bets" for cold start scenarios.
+![Popularity vs Quality](images/Popularity_vs_Quality_Top10_Baseline_Recommendations.png)
 
-**Performance Metrics:**
-- Average Rating: **7.2/10** (vs. 6.0 database avg)
+The scatter plot confirms the model's effectiveness. Red dots (baseline recommendations) cluster in the **upper-right quadrant**, representing the ideal intersection of:
+- **High Popularity** (x-axis): Recognizable, widely-watched films
+- **High Quality** (y-axis): Critically acclaimed with strong ratings
+
+This validates that our baseline provides "safe bets" for new users—movies that are both well-known and genuinely good, minimizing the risk of poor first impressions.
+
+**Baseline Model Metrics:**
+- Average Rating: **7.2/10** (vs. 6.0 database average)
 - Genre Coverage: 8 primary genres represented
 - Temporal Distribution: 80% from 1995-2024
 
 ---
 
-### 🚀 Main Model: Hybrid Recommendation Engine
+### 🚀 Main Model: The Hybrid Engine
 
-**Core Innovation**: Moving from static curation to **dynamic semantic retrieval** with multi-objective optimization.
+Moving from static curation to dynamic retrieval, the Main Model leverages **Natural Language Processing (NLP)** for semantic understanding.
 
-#### Step 1: NLP Processing (TF-IDF Vectorization)
+#### Step 1: NLP Processing
 
-**Input**: `metadata_soup` (composite of keywords, cast, crew, genres, overview)
+**Metadata Soup Creation:**
+We created a composite feature vector by concatenating:
+- Keywords (themes, plot elements)
+- Cast (top 5 actors)
+- Director
+- Genres (concatenated as single tokens)
+- Overview (plot summary)
 
-**Why TF-IDF over simple counting?**
-| Approach | Example | Problem |
-|----------|---------|---------|
-| **Keyword Matching** | "Action" appears in 2,000 movies | Generic, no discrimination |
-| **TF-IDF** | "Action" downweighted, "cyberpunk" highlighted | Unique descriptors get higher weight |
+**TF-IDF Vectorization:**
+We employed Term Frequency-Inverse Document Frequency to transform text into numerical vectors. Unlike simple keyword counting, TF-IDF:
+- **Downweights** generic terms that appear frequently (e.g., "Action", "Drama")
+- **Highlights** unique descriptors that differentiate movies (e.g., "cyberpunk", "neo-noir")
+- Allows the model to distinguish between "Space Horror" and "Space Comedy" based on semantic nuances
 
-**TF-IDF Formula:**
+**Mathematical Foundation:**
 ```
 TF-IDF(term, doc) = TF(term, doc) × IDF(term)
 
@@ -249,60 +158,95 @@ Where:
 - IDF = log(total docs / docs containing term)
 ```
 
-**Result**: 10,000+ dimensional sparse vectors where each dimension represents a unique term's importance.
+This produces ~10,000 dimensional sparse vectors where each dimension represents a unique term's importance to a specific movie.
 
 #### Step 2: Similarity Computation
 
-**Method**: Cosine Similarity
+Using **Cosine Similarity** on the TF-IDF vectors:
+
 ```
 similarity(A, B) = (A · B) / (||A|| × ||B||)
 ```
-Returns values 0 to 1, where:
+
+Returns values from 0 to 1:
 - **1.0** = Identical metadata (same cast, genres, themes)
 - **0.5** = Moderate overlap
 - **0.0** = Completely different
 
-**Process**:
+**Process:**
 1. Compute similarity between input movie and all 4,800 candidates
 2. Retrieve Top 100 candidates (efficiency optimization)
-3. Pass to re-ranking formula
+3. Pass to hybrid re-ranking formula
 
-#### Step 3: Hybrid Re-Ranking Formula
+#### Step 3: Genre Weighting (Inverse Frequency)
 
-**The Core Innovation**: Instead of ranking purely by similarity, we balance 4 competing objectives:
+To prevent overrepresentation of extremely popular genres, genre tokens are weighted using a logarithmic inverse frequency formula:
 
+$w_g = \log \left( \frac{N}{count_g} \right)$
+
+where:
+- $N$ – total number of movies in the database
+- $count_g$ – number of movies containing genre $g$
+
+Less frequent genres (e.g., "Film-Noir", "Western") receive higher weights, while overrepresented genres (e.g., "Drama", "Comedy") are downweighted. This improves personalization and reduces mainstream bias, ensuring that niche genres get fair representation in the recommendation space.
+
+#### Step 4: Vectorization Strategy
+
+Two complementary text vectorization techniques are applied to capture different aspects of movie metadata:
+
+| Vectorizer | Input | Purpose |
+|------------|-------|---------|
+| **TF-IDF** | Movie overview (plot summary) | Captures semantic meaning and thematic elements |
+| **CountVectorizer** | Weighted metadata soup (cast, crew, genres, keywords) | Captures structural and categorical features |
+
+**Process:**
+1. TF-IDF transforms overviews into semantic vectors emphasizing unique plot elements
+2. CountVectorizer with genre weighting processes metadata soup
+3. Resulting sparse matrices are **horizontally stacked** (concatenated)
+4. Combined matrix is **L2-normalized** to form the final feature representation
+
+This dual approach ensures the model understands both *what the movie is about* (semantics) and *who made it / what type it is* (structure).
+
+#### Step 5: Similarity Computation
+
+Movie-to-movie similarity is calculated using **cosine similarity** over the combined feature space:
+
+$\text{similarity}(i, j) = \cos(\theta) = \frac{\mathbf{A} \cdot \mathbf{B}}{||\mathbf{A}|| \cdot ||\mathbf{B}||}$
+
+This produces a full similarity matrix used for recommendation ranking, where values range from 0 (completely different) to 1 (identical).
+
+#### Step 6: Hybrid Ranking Strategy
+
+Candidate recommendations are ranked using a weighted scoring function that balances relevance and quality:
+
+$\textbf{Final Score} = \alpha \cdot \text{Quality}_{\text{norm}} + (1 - \alpha) \cdot \text{Similarity}_{\text{norm}}$
+
+**Where:**
+- **Similarity** – cosine similarity between input movie and candidate (semantic relevance)
+- **Quality** – popularity-adjusted rating score (ensures good movies are recommended)
+- $\alpha$ – tunable trade-off parameter controlling the balance
+
+**Parameter Tuning:**
+The $\alpha$ parameter determines the recommendation strategy:
+- **α = 0.3** (30% quality, 70% similarity): Prioritizes semantic relevance with quality filter
+- **α = 0.5** (50-50 split): Balanced approach
+- **α = 0.7** (70% quality, 30% similarity): Emphasizes universally acclaimed films
+
+**Example Calculation:**
 ```
-Final_Score = (0.5 × Similarity) + (0.3 × Quality) 
-              + (0.1 × Popularity) - (0.1 × Age_Penalty)
+Input Movie: "The Martian"
+Candidate: "Interstellar"
+α = 0.3 (current model setting)
+
+Similarity_norm:  0.85 (very similar sci-fi themes, survival, space)
+Quality_norm:     0.82 (popularity-adjusted rating score)
+
+Final Score = 0.3 × 0.82 + 0.7 × 0.85
+            = 0.246 + 0.595
+            = 0.841 → 84% Match
 ```
 
-**Weight Justification** (determined through grid search):
-
-| Factor | Weight | Rationale |
-|--------|--------|-----------|
-| **Similarity** | 50% | Primary objective—semantic relevance to input |
-| **Quality** | 30% | Critical—ensures recommendations are *good* movies |
-| **Popularity** | 10% | Balances mainstream recognition with niche discovery |
-| **Age** | -10% | Prevents "stale" recs; negative weight penalizes old films slightly |
-
-**Example Calculation**:
-```
-Movie: "Interstellar" (similar to "The Martian")
-
-Similarity Score:  0.85 (very similar themes)
-Quality Score:     0.82 (weighted rating 8.2/10)
-Popularity Score:  0.75 (log-scaled vote count)
-Age Score:         0.20 (11 years old → penalty)
-
-Final = (0.5×0.85) + (0.3×0.82) + (0.1×0.75) - (0.1×0.20)
-      = 0.425 + 0.246 + 0.075 - 0.020
-      = 0.726 → 73% Match
-```
-
-**Why This Works**:
-- Movies with 90% similarity but poor ratings drop in rankings
-- Hidden gems (low popularity, high quality) surface through quality weight
-- Recent releases get slight boost, but classics preserved via quality score
+This hybrid approach ensures that even highly similar movies with poor ratings drop in rankings, while maintaining semantic relevance as the primary driver. The system is robust to cold-start scenarios since quality scores are computed from global statistics rather than user history.
 
 ---
 
@@ -310,357 +254,196 @@ Final = (0.5×0.85) + (0.3×0.82) + (0.1×0.75) - (0.1×0.20)
 
 ### Validation Methodology: Monte Carlo Simulation
 
-**Setup**:
-- **Samples**: 50 random movies
-- **Iterations**: 20 runs per sample
-- **Total Tests**: 1,000 recommendation sets
+**Setup:**
+- **Samples**: 50 random movies from diverse genres and eras
+- **Iterations**: 20 recommendation runs per sample
+- **Total Tests**: 1,000 recommendation sets generated
 - **Metrics Tracked**: Quality, Diversity, Genre Overlap, Popularity Bias
 
 ### Global Health Metrics
 
-| Metric | Target | Achieved | Status | Interpretation |
-|--------|--------|----------|--------|----------------|
-| **Quality (Avg Rating)** | ≥6.5 | **6.60** | ✅ **Excellent** | Recommendations 10% better than database avg (6.0) |
+| Metric | Target Range | Achieved | Status | Interpretation |
+|--------|-------------|----------|--------|----------------|
+| **Quality (Avg Rating)** | ≥6.5 | **6.60/10** | ✅ **Excellent** | 10% better than database average (6.0) |
 | **Diversity Index** | ≥0.70 | **0.72** | ✅ **High Exploration** | Avoids filter bubbles—recommendations are varied |
-| **Genre Overlap** | 0.60-0.75 | **0.64** | ✅ **Goldilocks** | 64% share primary genre—relevant but not monotonous |
-| **Popularity Bias** | 1.0-2.5 | **1.51** | ✅ **Balanced** | 1.5× more popular than avg—recognizable but not just blockbusters |
+| **Genre Overlap** | 0.60-0.75 | **0.64** | ✅ **Balanced** | 64% share primary genre—relevant but not monotonous |
+| **Popularity Bias** | 1.0-2.5 | **1.51** | ✅ **Goldilocks Zone** | 1.5× more popular than average—recognizable but diverse |
 
 ### Detailed Analysis
 
-![Performance Dashboard](images/Plot_Results_for_Second_Model.png)
+![Metrics Visualization](images/Plot_Results_for_Second_Model.png)
 
-#### Chart 1: Quality Analysis (Top Left)
-**What it shows**: Distribution of recommended movie ratings vs. database average.
+#### **Quality Analysis (Top Left)**
+This distribution chart demonstrates the quality filtering effectiveness compared to the overall database. The green shaded area (model recommendations) is systematically shifted toward higher ratings (6.5-7.0 range) compared to the red dashed line (database average at 6.0). This rightward shift validates that the 30% quality weight in our hybrid formula successfully filters out low-rated content while maintaining a realistic bell-curved distribution without extreme outliers.
 
-**Key Findings**:
-- Model recommendations (green) are **right-shifted** toward 6.5-7.0 range
-- Database average (red line) at 6.0 shows the model filters out low-quality content
-- Bell curve remains smooth → No extreme outliers, quality is consistent
-- **Validation**: 30% quality weight successfully elevates recommendation quality
+#### **Diversity Zones (Top Right)**
+The histogram reveals the model's strong performance on the Diversity Index, with scores heavily concentrated around 0.72-0.80. The dramatic peak near 0.75 indicates that the recommendation engine successfully avoids "filter bubbles" where users would receive repetitive suggestions. The right-skewed pattern with very few instances below 0.4 demonstrates that the hybrid logic promotes exploration across the catalog rather than suggesting identical movies, preventing the staleness common in purely similarity-based systems.
 
-#### Chart 2: Diversity Zones (Top Right)
-**What it shows**: How varied recommendations are (0 = all identical, 1 = completely random).
+#### **Genre Overlap (Bottom Left)**
+This compact box plot illustrates genre consistency across recommendations, with the majority of values concentrated between 0.5 and 0.7 (50-70% overlap). The median at 0.64 demonstrates that approximately 6-7 out of 10 recommended movies share the input's primary genre, achieving **thematic consistency** without monotony. The tight distribution (small box with minimal whiskers) indicates predictable, reliable behavior across different movie inputs, while rare outliers near 0.0 show the model can occasionally suggest bold cross-genre recommendations when appropriate.
 
-**Key Findings**:
-- Peak at 0.75-0.80 → **High diversity** without descending into randomness
-- Very few instances below 0.4 → Model rarely suggests 10 identical movies
-- Right-skewed distribution → Tendency toward exploration over exploitation
-- **Validation**: TF-IDF + hybrid formula prevents filter bubbles
-
-#### Chart 3: Genre Overlap (Bottom Left)
-**What it shows**: Percentage of recommended movies sharing the input's primary genre.
-
-**Key Findings**:
-- Median at 0.60-0.64 → **Thematic consistency** (6-7 out of 10 share genre)
-- Tight distribution (small box) → Predictable behavior across different inputs
-- Outliers near 0.0 → Rare cases where recommendations cross genres entirely
-- **Validation**: 64% overlap = relevant but not monotonous
-
-#### Chart 4: Popularity Strategy (Bottom Right)
-**What it shows**: Distribution of popularity bias (0 = avg popularity, higher = more popular).
-
-**Key Findings**:
-- Peak near 0-2 → Healthy bias toward **recognizable** content
-- Long tail to 10 → Model **can** dig deep for niche recommendations
-- Right-skewed → Prefers mainstream but doesn't ignore hidden gems
-- **Validation**: 1.51 avg bias = sweet spot between blockbusters and obscure films
+#### **Popularity Strategy (Bottom Right)**
+This distribution chart reveals a strongly right-skewed pattern with the highest concentration near bias values of 0-2, indicating a healthy preference for recognizable content without exclusively recommending blockbusters. The peak at low bias values (where frequency reaches ~150) shows most recommendations are in the 1.5× more popular than average range—the "Goldilocks Zone" of recognition without mainstream oversaturation. The long tail extending to bias value 10 proves the model is capable of surfacing niche content and hidden gems when semantic similarity is strong, avoiding the trap of only recommending the top 100 most popular films.
 
 ---
 
 ## 📱 Application Interface
 
+The project is deployed as an interactive **Streamlit** web application, providing an intuitive user experience for movie discovery.
+
 ### Tech Stack
 - **Frontend**: Streamlit (Python-based reactive UI)
-- **Backend**: Scikit-Learn (TF-IDF), Pandas (data processing)
-- **APIs**: TMDB API for poster images and metadata
-- **Deployment**: Streamlit Cloud (free tier)
+- **Backend**: Scikit-Learn (TF-IDF vectorization, cosine similarity)
+- **Data Processing**: Pandas, NumPy
+- **API Integration**: TMDB API for dynamic poster fetching
+- **Deployment**: Streamlit Cloud
 
 ### User Journey
 
 #### 1️⃣ Movie Selection
 ![Interface 1](images/streamlit_interface1.png)
 
-**Features**:
-- Searchable dropdown of 4,800+ titles
-- Sorted alphabetically for easy navigation
-- Displays selected movie's metadata (year, genres, rating)
+**Features:**
+- Searchable dropdown menu of **4,800+ titles**
+- Alphabetically sorted for easy navigation
+- Displays selected movie's metadata (year, genres, rating, overview)
+- Real-time search filtering
 
 #### 2️⃣ Recommendation Display
 ![Interface 2](images/streamlit_interface4.png)
 ![Interface 3](images/streamlit_interface3.png)
 
-**For Each Recommendation**:
-- **Match %**: Hybrid score (0-100%) showing confidence
-- **Movie Poster**: Fetched dynamically from TMDB
-- **Title & Year**: Clear identification
-- **Rating**: Weighted IMDB score (Bayesian average)
-- **Genres**: Top 3 tags for context
-- **Overview**: Brief plot summary (truncated to 150 chars)
+**For Each Recommendation:**
+- 🎯 **Match %**: Hybrid score (0-100%) showing recommendation confidence
+- 🎬 **Movie Poster**: Dynamically fetched from TMDB API
+- 📅 **Title & Year**: Clear identification
+- ⭐ **Rating**: Bayesian weighted IMDB score
+- 🎭 **Genres**: Top 3 genre tags for quick context
+- 📝 **Overview**: Brief plot summary (truncated for readability)
 
-**Interactive Elements**:
-- Click poster → Expands to full size
-- Hover over Match % → Tooltip explains weighting
-- "Why this recommendation?" → Shows similarity breakdown
-
-### Performance Optimizations
-
-| Challenge | Solution | Impact |
-|-----------|----------|--------|
-| **Model Load Time** | Cache TF-IDF matrix on first load | 8s → 0.3s on subsequent requests |
-| **Image Loading** | Lazy load posters below fold | 60% faster perceived load time |
-| **API Rate Limits** | Cache TMDB responses for 24h | 95% reduction in API calls |
+**Interactive Elements:**
+- Hover over posters for expanded view
+- Click Match % for breakdown of similarity/quality/popularity components
+- Responsive layout adapts to mobile and desktop
 
 ---
 
-## 🛠️ Installation & Usage
+## 💡 Key Learnings & Future Work
 
-### Prerequisites
-```bash
-Python 3.8+
-pip
-Git
-```
+### Technical Discoveries
+
+**What Worked:**
+
+1. **"Metadata Soup" Approach**
+   - Combining cast + crew + keywords + genres created a richer semantic space than individual features
+   - **Lesson**: Context matters more than isolated attributes
+
+2. **TF-IDF Superiority**
+   - Significantly outperformed simple keyword matching
+   - Generic terms automatically downweighted
+   - **Lesson**: Smart feature engineering > complex algorithms
+
+3. **Bayesian Weighting**
+   - Essential for handling confidence variance in ratings
+   - Prevents statistical outliers from skewing recommendations
+   - **Lesson**: Always account for uncertainty in metrics
+
+4. **Multi-Objective Optimization**
+   - Equal weights (25% each) produced mediocre results
+   - Grid search revealed 50-30-10-10 split as optimal
+   - **Lesson**: Domain expertise + empirical testing > intuition
+
+**What Didn't Work:**
+
+- ❌ Initial Word2Vec embeddings underperformed TF-IDF (over-engineering)
+- ❌ Treating multi-word genres as separate tokens created semantic drift
+- ❌ Pure similarity ranking without quality filtering recommended many obscure low-rated films
+
+### Future Improvements
+
+#### 🔮 Short-Term Enhancements
+- **Explainability Dashboard**: Add "Why this recommendation?" breakdown showing individual score components
+- **User Feedback Loop**: Implement thumbs up/down to retrain weights based on preferences
+- **A/B Testing Framework**: Experiment with different weight configurations
+
+#### 🚀 Long-Term Roadmap
+
+1. **GenAI Integration**
+   - Upgrade NLP layer using **BERT** or **Sentence Transformers** for deeper semantic understanding
+   - Expected improvement: Better handling of synonyms and abstract themes
+   - Challenge: Computational cost and model size
+
+2. **Conversational Interface**
+   - Add chatbot for natural language queries: *"I want a sad movie about robots with a hopeful ending"*
+   - Powered by LLMs (GPT-4 or Llama 3) for query parsing
+   - Challenge: Handling ambiguous requests and maintaining context
+
+3. **Collaborative Filtering Hybrid**
+   - Combine content-based with user behavior signals
+   - Requires user accounts and watch history tracking
+   - Privacy considerations: GDPR compliance, anonymization
+
+4. **Production Deployment**
+   - **Dockerization** for containerized deployment
+   - Migration from Streamlit Cloud to AWS ECS / Google Cloud Run
+   - Target: <500ms latency, 100+ concurrent users, 99.9% uptime
+
+---
+
+## 🛠️ Installation
 
 ### Local Setup
 
 ```bash
-# 1. Clone repository
+# 1. Clone the repository
 git clone https://github.com/your-username/movie-recommender.git
-cd movie-recommender
 
-# 2. Create virtual environment (recommended)
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+# 2. Navigate to directory
+cd movie-recommender
 
 # 3. Install dependencies
 pip install -r requirements.txt
 
-# 4. Download pre-trained models
-# Option A: From Hugging Face
-git lfs install
-git clone https://huggingface.co/Przemsonn/Recommendation_System models/
+# 4. (Optional) Download pre-trained models from Hugging Face
+# Or train from scratch using the notebook
 
-# Option B: Train from scratch
+# 5. Run the analysis notebook (optional)
 jupyter notebook Recommendation_System.ipynb
-# Run all cells → Generates models in models/ directory
 
-# 5. Launch Streamlit app
+# 6. Launch Streamlit app locally
 streamlit run app.py
 ```
 
 ### Project Structure
 ```
 movie-recommender/
-├── app.py                          # Streamlit application
-├── Recommendation_System.ipynb      # Full analysis & model training
-├── requirements.txt                 # Dependencies
-├── models/
-│   ├── tfidf_vectorizer.pkl        # Trained TF-IDF model
-│   ├── similarity_matrix.pkl       # Precomputed similarities
-│   └── movie_data.csv              # Processed dataset
-├── images/                          # Performance charts
+├── data/
+|   ├── tmdb_5000_credits.csv
+|   ├── tmdb_5000_movies.csv
+├── images/   
+├── notebooks
+|   ├── Recommendation_System.ipynb
+├── /gitignore                       
+├── app.py                         
+├── requirements.txt                
 └── README.md
 ```
-
-### Usage Examples
-
-**In Python**:
-```python
-from recommender import MovieRecommender
-
-# Initialize
-rec = MovieRecommender(model_path='models/')
-
-# Get recommendations
-recommendations = rec.recommend(
-    movie_title='The Dark Knight',
-    n_recommendations=10
-)
-
-# Access results
-for movie in recommendations:
-    print(f"{movie['title']}: {movie['match_score']:.1f}% match")
-```
-
-**Via Streamlit UI**:
-1. Navigate to `http://localhost:8501`
-2. Select movie from dropdown
-3. View instant recommendations with posters
-
----
-
-## 💡 Key Learnings & Insights
-
-### Technical Discoveries
-
-1. **"Metadata Soup" is Powerful**
-   - Combining cast + crew + keywords + genres created a richer semantic space than individual features
-   - **Lesson**: More context = better NLP understanding
-
-2. **TF-IDF > Simple Matching**
-   - Generic terms like "Action" get downweighted automatically
-   - Unique descriptors like "cyberpunk" or "heist" drive differentiation
-   - **Lesson**: Feature engineering matters more than complex algorithms
-
-3. **Bayesian Averaging is Essential**
-   - Simple averages mislead: A movie with 1 vote at 10/10 shouldn't outrank one with 10,000 votes at 8.5/10
-   - **Lesson**: Account for confidence in your metrics
-
-4. **Multi-Objective Optimization Requires Tuning**
-   - Initial equal weights (25% each) produced poor results
-   - Grid search revealed 50-30-10-10 split was optimal
-   - **Lesson**: Domain expertise + empirical testing beats intuition
-
----
-
-## 🚀 Future Roadmap
-
-### Phase 1: GenAI Integration (Q2 2025)
-**Goal**: Upgrade from TF-IDF to transformer-based embeddings
-
-**Planned Approach**:
-```python
-# Current: TF-IDF
-vectorizer = TfidfVectorizer()
-
-# Future: Sentence Transformers
-from sentence_transformers import SentenceTransformer
-model = SentenceTransformer('all-MiniLM-L6-v2')
-embeddings = model.encode(metadata_soup)
-```
-
-**Expected Impact**:
-- Capture semantic meaning beyond keyword matching
-- Understand synonyms: "thrilling" ≈ "suspenseful"
-- Better cross-genre recommendations (e.g., "psychological drama" → "cerebral sci-fi")
-
-**Challenges**:
-- Computational cost: 4,800 movies × 384 dimensions vs. current sparse vectors
-- Need GPU for inference
-- Model size: 80MB+ vs. current 2MB TF-IDF vectorizer
-
-### Phase 2: Conversational Interface (Q3 2025)
-**Goal**: Natural language query system
-
-**User Interaction**:
-```
-User: "I want a sad movie about robots with a hopeful ending"
-Bot: "Based on your request, I recommend:
-      1. WALL-E (2008) - 96% match
-      2. A.I. Artificial Intelligence (2001) - 89% match
-      3. Big Hero 6 (2014) - 82% match"
-```
-
-**Technical Stack**:
-- **LLM**: GPT-4 or Llama 3 for query understanding
-- **Vector DB**: Pinecone or Weaviate for semantic search
-- **Intent Parser**: Extract mood, genre, themes from natural language
-
-**Implementation Challenges**:
-- Handling ambiguous queries ("something fun" → Comedy? Action? Both?)
-- Balancing conversational context with recommendation logic
-- Cost management (LLM API calls)
-
-### Phase 3: Collaborative Filtering Hybrid (Q4 2025)
-**Goal**: Combine content-based with user behavior data
-
-**Proposed Architecture**:
-```
-Final_Score = 0.4×Content_Similarity 
-            + 0.3×Collaborative_Signal 
-            + 0.2×Quality 
-            + 0.1×Popularity
-```
-
-**Data Requirements**:
-- User watch history (requires user accounts)
-- Ratings/feedback (thumbs up/down)
-- Session behavior (time spent on recommendations)
-
-**Privacy Considerations**:
-- Anonymize user data
-- GDPR compliance for EU users
-- Opt-in for data collection
-
-### Phase 4: Deployment & Scalability
-**Dockerization**:
-```dockerfile
-FROM python:3.9-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY . .
-CMD ["streamlit", "run", "app.py"]
-```
-
-**Infrastructure**:
-- **Current**: Streamlit Cloud (500MB RAM, limited to 1 concurrent user)
-- **Future**: AWS ECS or Google Cloud Run (auto-scaling, 99.9% uptime)
-
-**Performance Targets**:
-- < 500ms recommendation latency
-- Support 100+ concurrent users
-- 99.9% uptime SLA
-
----
-
-## 🤝 Contributing
-
-We welcome contributions! Here's how you can help:
-
-### Areas for Improvement
-
-| Area | Difficulty | Impact | Description |
-|------|-----------|--------|-------------|
-| **A/B Testing Framework** | 🟡 Medium | 🔥 High | Implement experimentation platform to test weight variations |
-| **Explainability Dashboard** | 🟢 Easy | 🔥 High | Add "Why this?" breakdown showing similarity/quality/popularity scores |
-| **Multi-language Support** | 🔴 Hard | 🔥 Medium | Extend to non-English movies (requires multilingual embeddings) |
-| **Real-time Trending** | 🟡 Medium | 🔥 Medium | Integrate live box office data to boost trending movies |
-| **User Feedback Loop** | 🟢 Easy | 🔥 High | Add thumbs up/down to retrain weights based on user preferences |
-
-### Contribution Guidelines
-
-1. **Fork & Clone**
-   ```bash
-   git clone https://github.com/your-username/movie-recommender.git
-   cd movie-recommender
-   git checkout -b feature/your-feature-name
-   ```
-
-2. **Make Changes**
-   - Follow PEP 8 style guide
-   - Add unit tests for new features
-   - Update README if adding functionality
-
-3. **Test Locally**
-   ```bash
-   pytest tests/
-   streamlit run app.py  
-   ```
-
-4. **Submit PR**
-   - Describe changes clearly
-   - Reference related issues
-   - Include screenshots for UI changes
-
-### Code of Conduct
-- Be respectful and constructive
-- Focus on technical merit, not personal opinions
-- Welcome newcomers and diverse perspectives
 
 ---
 
 ## 🙏 Acknowledgments
 
-- **TMDB**: For providing the comprehensive movie database and API
-- **Scikit-Learn**: For robust NLP and ML tools
+- **TMDB**: For providing comprehensive movie database and API
+- **Scikit-Learn**: For robust machine learning tools
 - **Streamlit**: For making deployment accessible
-- **Open Source Community**: For countless tutorials and Stack Overflow answers
+- **Open Source Community**: For invaluable resources and support
 
 ---
 
 <div align="center">
 
-**If you found this project helpful, please ⭐ star the repository!**
+**⭐ If you found this project helpful, please star the repository!**
+
+[![GitHub stars](https://img.shields.io/github/stars/Przemsonn/movie-recommender?style=social)](https://github.com/Przemsonn/movie-recommender)
 
 </div>
