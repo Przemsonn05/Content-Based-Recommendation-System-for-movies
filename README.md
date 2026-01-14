@@ -252,7 +252,7 @@ This hybrid approach ensures that even highly similar movies with poor ratings d
 
 ## 📊 Performance & Evaluation
 
-### Validation Methodology: Monte Carlo Simulation
+### Validation Methodology: Simulation
 
 **Setup:**
 - **Samples**: 50 random movies from diverse genres and eras
@@ -348,11 +348,6 @@ The project is deployed as an interactive **Streamlit** web application, providi
    - Prevents statistical outliers from skewing recommendations
    - **Lesson**: Always account for uncertainty in metrics
 
-4. **Multi-Objective Optimization**
-   - Equal weights (25% each) produced mediocre results
-   - Grid search revealed 50-30-10-10 split as optimal
-   - **Lesson**: Domain expertise + empirical testing > intuition
-
 **What Didn't Work:**
 
 - ❌ Initial Word2Vec embeddings underperformed TF-IDF (over-engineering)
@@ -421,9 +416,9 @@ movie-recommender/
 |   ├── tmdb_5000_credits.csv
 |   ├── tmdb_5000_movies.csv
 ├── images/   
-├── notebooks
+├── notebooks/
 |   ├── Recommendation_System.ipynb
-├── /gitignore                       
+├── .gitignore                       
 ├── app.py                         
 ├── requirements.txt                
 └── README.md
@@ -444,6 +439,6 @@ movie-recommender/
 
 **⭐ If you found this project helpful, please star the repository!**
 
-[![GitHub stars](https://img.shields.io/github/stars/Przemsonn/movie-recommender?style=social)](https://github.com/Przemsonn/movie-recommender)
+[![GitHub stars](https://img.shields.io/github/stars/Przemsonn/movie-recommender?style=social)](https://github.com/Przemsonn05/Content-Based-Recommendation-System-for-movies?tab=readme-ov-file)
 
 </div>
