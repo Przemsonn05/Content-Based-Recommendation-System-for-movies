@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 
+#Weighted rating for baseline model
 def calculate_weighted_rating(data):
     C = data['vote_average'].mean()
     m = data['vote_count'].quantile(0.60)

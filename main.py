@@ -14,39 +14,34 @@ from src.evaluation import evaluate_model, find_best_alpha
 
 
 def main():
-
-    print("1. Wczytywanie danych...")
+    print("1. Loading data...")
     df = load_and_merge_data(MOVIES_PATH, CREDITS_PATH)
-    print(f"   Załadowano {len(df)} filmów.")
+    print(f"Loaded {len(df)} movies.")
 
-    print("2. Przetwarzanie danych i inżynieria cech...")
+    print("2. Processing data...")
     df = parse_json_columns(df)
     df = add_engineered_features(df)
 
     df, C, m = calculate_weighted_rating(df)
 
-    print("3. Budowanie macierzy cech...")
+    print("3. Building combined matrix...")
     combined_matrix, df = build_matrices(df)
 
-    print("4. Obliczanie podobieństwa cosinusowego...")
+    print("4. Calculating cosine similarity...")
     cosine_sim = cosine_similarity(combined_matrix)
 
-    print("\n--- TEST BASELINE ---")
     baseline_recs = get_baseline_recommendations(df, n=5, min_votes=m)
-    print(baseline_recs[['original_title', 'weighted_rating', 'vote_count']])
+    print(baseline_recs[['original_title','release_year','vote_average','vote_count','weighted_rating']])
 
-    print("\n--- TUNING PARAMETRÓW (Alpha) ---")
     alpha_results = find_best_alpha(df, cosine_sim)
-
     best_row = alpha_results.loc[alpha_results['composite_score'].idxmax()]
     best_alpha = best_row['alpha']
 
-    print("\n📊 Wyniki Tuningu:")
     print(alpha_results[['alpha', 'quality', 'diversity', 'composite_score']])
-    print(f"\n✅ Najlepsze Alpha: {best_alpha:.2f}")
+    print(f"\n Best alpha parameter: {best_alpha:.2f}")
 
     test_movie = "The Dark Knight"
-    print(f"\n--- REKOMENDACJE DLA: '{test_movie}' ---")
+    print(f"\n Recommendations for: '{test_movie}' ---")
 
     recs = recommendation(
         test_movie,
@@ -59,9 +54,8 @@ def main():
     if not recs.empty:
         print(recs[['original_title', 'vote_average', 'final_score', 'genres']].head(10))
     else:
-        print("Nie znaleziono filmu.")
+        print("Movie was not found.")
 
-    print("\n--- FINALNA EWALUACJA ---")
     final_stats = evaluate_model(
         df,
         cosine_sim,
@@ -69,9 +63,8 @@ def main():
         alpha=best_alpha
     )
 
-    print("\n📈 OSTATECZNE WYNIKI:")
+    print("\n FINAL RESULTS:")
     print(final_stats)
-
 
 if __name__ == "__main__":
     main()

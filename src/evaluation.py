@@ -9,29 +9,29 @@ from src.models import recommendation
 def evaluate_baseline_model(df, top_n_movies):
     metrics = {}
     
-    # Average Rating / Votes / Weighted
+    #Average Rating / Votes / Weighted
     metrics['avg_rating'] = top_n_movies['vote_average'].mean()
     metrics['avg_vote_count'] = top_n_movies['vote_count'].mean()
     metrics['avg_weighted_rating'] = top_n_movies['weighted_rating'].mean()
     
-    # Genre Diversity
+    #Genre Diversity
     all_genres = [g for genres in top_n_movies['genres'] for g in genres]
     metrics['genre_diversity'] = len(set(all_genres))
     metrics['most_common_genre'] = Counter(all_genres).most_common(1)[0]
     
-    # Year Stats
+    #Year Stats
     metrics['year_std'] = top_n_movies['release_year'].std()
     metrics['avg_year'] = top_n_movies['release_year'].mean()
     metrics['oldest_movie'] = top_n_movies['release_year'].min()
     metrics['newest_movie'] = top_n_movies['release_year'].max()
     
-    # Coverage & Popularity Bias
+    #Coverage & Popularity Bias
     metrics['coverage'] = len(top_n_movies) / len(df) * 100
     metrics['popularity_bias'] = top_n_movies['vote_count'].mean() / df['vote_count'].mean()
     
     return metrics
 
-# Calcuate some metrics for second model
+#Calcuate some metrics for second model
 def evaluate_model(data, cosine_sim, sample_size=50, top_k=10, alpha=0.3, plot_charts=False):
     metrics = {
         'quality': [], 
@@ -77,14 +77,14 @@ def evaluate_model(data, cosine_sim, sample_size=50, top_k=10, alpha=0.3, plot_c
 
     return pd.DataFrame(metrics).mean()
 
-# Function iterates over alpha values to find the best balance
+#Function iterates over alpha values to find the best balance
 def find_best_alpha(data, cosine_sim, alpha_range=np.arange(0.1, 0.9, 0.1)):
     results = []
 
     for alpha in alpha_range:
         metrics = evaluate_model(data, cosine_sim, sample_size=50, alpha=alpha)
         
-        # Composite Score Formula
+        #Composite Score Formula
         composite = (
             0.35 * metrics['quality'] +
             0.30 * metrics['diversity'] +
