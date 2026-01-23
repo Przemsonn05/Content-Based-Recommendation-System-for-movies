@@ -253,9 +253,7 @@ The recommendation function integrates several critical refinements:
 
 Final recommendations are ranked using a weighted hybrid scoring function:
 
-$$
-\text{Final Score} = \alpha \cdot \text{Quality}_{\text{norm}} + (1 - \alpha) \cdot \text{Similarity}_{\text{norm}}
-$$
+**Final Score = α × Quality_norm + (1 − α) × Similarity_norm**
 
 ### Where:
 - **Similarity** – cosine similarity between the input movie and candidate
