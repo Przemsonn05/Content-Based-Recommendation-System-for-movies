@@ -131,9 +131,7 @@ Several custom features were engineered to strengthen the recommendation logic a
 
 To quantify overall content quality, a composite weighted metric was defined:
 
-\[
-\text{Quality Score} = 0.6 \times \text{Rating} + 0.4 \times \log(\text{Popularity})
-\]
+**Quality Score = 0.6 × Rating + 0.4 × log(Popularity)**
 
 This formulation ensures that both **critical reception** and **audience engagement** contribute to the final score. It prevents the system from over-recommending either obscure but highly rated films or widely popular yet low-quality content.
 
