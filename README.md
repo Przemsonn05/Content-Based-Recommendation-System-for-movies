@@ -194,7 +194,7 @@ Moving from static curation to dynamic retrieval, the main model leverages **Nat
 
 ---
 
-## Step 1: NLP Processing
+### Step 1: NLP Processing
 
 ### Metadata “Soup” Creation
 A composite textual representation was constructed by concatenating key metadata fields:
@@ -226,7 +226,7 @@ This dual-vectorization approach combines **semantic weighting (TF-IDF)** with *
 
 ---
 
-## Step 2: Similarity Computation
+### Step 2: Similarity Computation
 
 Movie-to-movie similarity is computed using **Cosine Similarity** over TF-IDF vectors:
 
@@ -237,7 +237,7 @@ Similarity scores range from **0 to 1**:
 - **0.5** – moderate thematic overlap
 - **0.0** – no meaningful similarity
 
-## Step 3: Recommendation Logic – Key Design Insights
+### Step 3: Recommendation Logic – Key Design Insights
 
 The recommendation function integrates several critical refinements:
 
@@ -249,7 +249,7 @@ The recommendation function integrates several critical refinements:
 
 ---
 
-## Step 4: Hybrid Ranking Strategy
+### Step 4: Hybrid Ranking Strategy
 
 Final recommendations are ranked using a weighted hybrid scoring function:
 
