@@ -243,21 +243,30 @@ def home():
     st.markdown("<h2 style='text-align:center;'>🎬 About the Project</h2>", unsafe_allow_html=True)
 
     st.markdown("""
+    <div style="text-align:center;">
+
     This project is a **movie recommendation system** designed to help users discover films they are likely to enjoy.
     It combines **data-driven popularity curation** with **semantic, content-based recommendations** powered by NLP.
 
     The system solves two key problems:
-    - **Cold Start** – when no user preferences are known
-    - **Personalized Discovery** – when the user selects a movie they like
+                
+    **Cold Start** – when no user preferences are known
+            
+    **Personalized Discovery** – when the user selects a movie they like
 
     ---
+
     ### 🧊 Baseline Model – Cold Start Solution
 
     The **Baseline Model** is used when the user has no prior interaction history.
     Instead of relying on raw averages, it applies a **Weighted Rating formula**, which balances:
-    - movie ratings
-    - number of votes (confidence)
-    - overall dataset statistics
+                
+     movie ratings
+                
+     number of votes (confidence)
+                
+     overall dataset statistics
+                
 
     ✔ Prevents highly-rated but obscure movies from dominating  
     ✔ Surfaces popular, trustworthy titles  
@@ -266,60 +275,72 @@ def home():
     The output is a list of **globally popular and reliable movies**, optionally filtered by genre.
 
     ---
+
     ### 🧠 Main Recommendation Engine – Content-Based NLP Model
 
     The main recommender uses a **content-based approach** enhanced with **Natural Language Processing**.
 
     Each movie is represented using a **metadata soup**, which includes:
-    - genres
-    - keywords
-    - cast & crew
-    - additional descriptive features
+    genres,
+    keywords,
+    cast & crew,
+    additional descriptive features
 
     These features are vectorized using:
-    - **TF-IDF** (to emphasize unique descriptors)
-    - **Count Vectorization**
-    - **Cosine Similarity** to measure semantic closeness
+                
+     **TF-IDF** (to emphasize unique descriptors)
+                
+     **Count Vectorization**
+                
+     **Cosine Similarity** to measure semantic closeness
 
-    To balance relevance and variety, the system applies:
-    - **MMR (Maximal Marginal Relevance)** concepts
-    - a weighted scoring function combining similarity and quality
+    To balance relevance and variety, the system applies: **MMR (Maximal Marginal Relevance)** concepts
+    and a weighted scoring function combining similarity and quality
 
     ✔ Finds semantically similar movies  
     ✔ Avoids repetitive recommendations  
     ✔ Adapts to user taste without popularity bias  
 
     ---
+
     ### 📊 Evaluation & Design Philosophy
 
     The models were evaluated using multiple metrics:
-    - **Quality** – average rating of recommendations
-    - **Diversity** – how different the recommendations are
-    - **Genre Overlap** – topical consistency
-    - **Popularity Bias** – balance between mainstream and niche content
+                
+     **Quality** – average rating of recommendations
+                
+     **Diversity** – how different the recommendations are
+                
+     **Genre Overlap** – topical consistency
+                
+     **Popularity Bias** – balance between mainstream and niche content
 
     The final system strikes a **“Goldilocks balance”**:
     not too popular, not too obscure — just relevant.
 
     ---
+
     ### ✨ Summary
 
     This project demonstrates how simple statistical models and advanced Natural Language 
     Processing (NLP) techniques can work together to create a robust, explainable, 
     and user-friendly movie recommendation system.
-                
+                    
     By combining a popularity-based baseline model with a content-based similarity approach, 
     the system balances recommendation quality, diversity, and interpretability. 
     Statistical weighting ensures reliable rankings for widely rated movies, 
     while NLP-driven feature extraction and cosine similarity enable personalized 
     recommendations based on movie content.
-                
+                    
     The project emphasizes model transparency, practical performance, and real-world 
     usability, showing that effective recommendation systems do not require complex 
     deep learning architectures. The final solution is delivered as an interactive 
     Streamlit application, allowing users to explore recommendations intuitively while 
     maintaining full insight into how results are generated.
-    """)
+
+    </div>
+    """, unsafe_allow_html=True)
+
     
 def search():
     if st.button("⬅ Back"):
