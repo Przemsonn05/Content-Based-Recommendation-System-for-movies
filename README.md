@@ -347,8 +347,8 @@ The project is deployed as an interactive **Streamlit** web application, providi
 - Real-time search filtering
 
 #### 2️⃣ Recommendation Display
-![Interface 2](images/streamlit_interface4.png)
-![Interface 3](images/streamlit_interface3.png)
+![Interface 2](images/streamlit_interface_v2.png)
+![Interface 3](images/streamlit_interface_v3.png)
 
 **For Each Recommendation:**
 - 🎯 **Match %**: Hybrid score (0-100%) showing recommendation confidence
@@ -446,8 +446,11 @@ movie-recommender/
 ├── images/   
 ├── notebooks/
 |   ├── Recommendation_System.ipynb
-├── .gitignore                       
-├── app.py                         
+├── src/
+├── .gitignore
+├── LICENSE                       
+├── app.py      
+├── main.py                   
 ├── requirements.txt                
 └── README.md
 ```
